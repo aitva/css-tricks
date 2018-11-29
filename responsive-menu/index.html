@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Responsive Menu</title>
+        <style>
+            html, body {
+                margin: 0;
+                padding: 0;
+            }
+            .header {
+                background-color: lightcyan;
+            }
+            .container {
+                max-width: 900px;
+                margin: 0 auto;
+            }
+            .menu {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap;
+            }
+            .menu__item {
+                height: 90px;
+                width: 90px;
+                /* DEBUG: forbide div to shrink */
+                flex-shrink: 0;
+            }
+            .menu__item--logo {
+                background-color: rgba(255, 0, 0 ,0.8);
+            }
+            .menu__item--nav {
+                height: 60px;
+                width: 360px;
+                background-color: rgba(0, 255, 0 ,0.8);
+            }
+            .menu__item--settings {
+                background-color: rgba(0, 0, 255 ,0.8);
+            }
+            @media (max-width: 600px) {
+                .menu__item--nav {
+                    order: 3;
+                    flex-basis: 100%;
+                }    
+            }
+        </style>
+    </head>
+    <body>
+        <header class="header">
+            <div class="container">
+                <div class="menu">
+                    <div class="menu__item menu__item--logo"></div>
+                    <div class="menu__item menu__item--nav"></div>
+                    <div class="menu__item menu__item--settings"></div>
+                </div>
+            </div>
+        </header>
+    </body>
+</html>
