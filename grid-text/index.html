@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Grid Text Experiment</title>
+    <style>
+.container {
+    margin: 0 auto 1em auto;
+    max-width: 800px;
+}
+.container--blue {
+    background-color: lightblue;
+}
+.container--red {
+    background-color: lightcoral;
+}
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-areas: "title . summary";
+}
+.title {
+    grid-area: title;
+    font-size: 2em;
+}
+.summary {
+    grid-area: summary
+}
+    </style>
+</head>
+<body>
+    <div class="container container--blue">
+        <div class="title">
+            <a href="#">Dolor necessitatibus</a>
+        </div>
+    </div>
+    <div class="container container--red">
+        <main class="grid">
+            <div class="title">
+                <a href="#">Dolor necessitatibus</a>
+            </div>
+            <div class="summary">
+                Adipisicing blanditiis dolor
+            </div>
+        </main>
+    </div>
+    <div class="container">
+        This code was written to debug a problem of line-height on a grid.
+        In the end the bug was introduce by Semantic UI, forcing a line-height
+        smaller than the font-size.
+    </div>
+</body>
+</html>
