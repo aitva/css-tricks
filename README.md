@@ -5,7 +5,7 @@ This is a collection of experiment with CSS.
 ## Full bleed layout
 
 This is an example layout introduced by Josh Comeau at
-https://joshwcomeau.com/css/full-bleed/.
+<https://joshwcomeau.com/css/full-bleed/>.
 
 ## Responsive menu
 
