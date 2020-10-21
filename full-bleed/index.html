@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Full bleed layout</title>
+  <style>
+    html, body {
+      padding: 0;
+      margin: 0;
+    }
+    img {
+      display: block;
+      width: 100%;
+    }
+    p {
+      text-align: justify;
+    }
+    .container {
+      display: grid;
+      grid-template-columns: minmax(1em, 1fr) min(65ch, 100%) minmax(1em, 1fr);
+    }
+    .container * {
+      grid-column: 2;
+    }
+    .full-bleed {
+      max-width: 1200px;
+      margin: 0 auto;
+      grid-column: 1 / -1;
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <h1>Lorem optio sunt maxime eligendi</h1>
+    <p>
+      Lorem corrupti voluptas sit quos itaque? Obcaecati consequuntur eos
+      voluptatum debitis voluptatem. At obcaecati maxime atque dolores quasi,
+      aperiam obcaecati Est voluptates sed asperiores neque quasi. Doloremque
+      provident animi aspernatur nulla laborum consectetur? Sint dolore facere
+      dolor accusantium delectus. Sed voluptatum velit nam repudiandae et? Ipsa
+      aperiam maxime earum nostrum
+    </p>
+    <img class="full-bleed" src="./meerkat.jpg" alt="A full-bleed meerkat.">
+    <p>
+      Lorem laboriosam eos accusantium dolor corrupti Veniam a aliquid
+      reiciendis commodi commodi aliquid Aliquid aperiam nihil quaerat nam
+      exercitationem, rem Provident consequuntur error asperiores et placeat?
+      Molestias amet ut ex sapiente molestiae explicabo quos? Rem tempora ab
+      maiores hic ut similique quasi. Odit nobis reprehenderit dignissimos
+      veritatis ad. Dolorem ea
+    </p>
+  </main>
+</body>
+</html>
