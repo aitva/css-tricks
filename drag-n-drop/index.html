@@ -29,6 +29,30 @@
       border: 1px solid var(--border-color);
       background-color: var(--bg-color);
     }
+    .task[draggable="true"] {
+      cursor: move;
+      position: relative;
+
+      .resize {
+        cursor: col-resize;
+        position: absolute;
+        top: -1px;
+        height: calc(100% + 2px);
+        width: 5px;
+      }
+      .resize-left {
+        left: -1px;
+      }
+      .resize-right {
+        right: -1px;
+      }
+      .resize-preview {
+        left: -1px;
+        width: calc(100% + 2px);
+        background-color: red;
+        opacity: 0.2;
+      }
+    }
     .stack {
       display: grid;
       grid-template-columns: 1fr;
@@ -59,6 +83,8 @@
     <table id="planned"></table>
   </div>
   <script src="table.js"></script>
+  <script src="dragndrop.js"></script>
+  <script src="resize.js"></script>
   <script>
     (function () {
       const headers = ['07/10', '14/10', '21/10', '26/10', '04/11', '11/11', '18/11', '25/11'];
@@ -74,7 +100,11 @@
         }
       ];
       let elem = document.getElementById('planned');
-      const planned = new Table(elem, headers, plannedTasks);
+      const planned = [
+          new Resize(elem, headers, plannedTasks),
+          new DragNDrop(elem, headers, plannedTasks),
+          new Table(elem, headers, plannedTasks),
+      ];
       
       const declaredTasks = [
         {
