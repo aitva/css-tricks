@@ -100,11 +100,10 @@
         }
       ];
       let elem = document.getElementById('planned');
-      const planned = [
-          new Resize(elem, headers, plannedTasks),
-          new DragNDrop(elem, headers, plannedTasks),
-          new Table(elem, headers, plannedTasks),
-      ];
+      const planned = new Table(elem, headers, plannedTasks);
+      planned.addNotifier(new DragNDrop(planned));
+      planned.addNotifier(new Resize(planned));
+      planned.render();
       
       const declaredTasks = [
         {
@@ -119,6 +118,7 @@
       ];
       elem = document.getElementById('declared');
       const declared = new Table(elem, headers, declaredTasks);
+      declared.render();
     })();
   </script>
 </body>

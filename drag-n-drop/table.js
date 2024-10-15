@@ -1,5 +1,6 @@
 function Table(node, headers, rows) {
   const that = this;
+  const notifiers = [];
 
   function createHeader() {
     const tr = document.createElement('tr');
@@ -39,7 +40,7 @@ function Table(node, headers, rows) {
       td.dataset.col = i;
 
       if (row.start === i) {
-        createResizeHandle(td);
+        createResizeHandles(td);
         td.classList.add('task');
         td.colSpan = row.span;
         i += (row.span - 1);
@@ -51,7 +52,7 @@ function Table(node, headers, rows) {
     return tr;
   };
 
-  function createResizeHandle(td) {
+  function createResizeHandles(td) {
     const left = document.createElement('div');
     left.classList.add('resize', 'resize-left')
     td.appendChild(left)
@@ -60,15 +61,64 @@ function Table(node, headers, rows) {
     right.classList.add('resize', 'resize-right')
     td.appendChild(right)
   }
-  
-  function handleUpdate() {
+
+  /*** Public properties ***/
+
+  this.node = node;
+  this.headers = headers;
+  this.rows = rows;
+
+  this.addNotifier = function (n) {
+    notifiers.push(n);
+  };
+
+  this.render = function () {
     const thead = createHeader();
     const tbody = createRows();
     node.replaceChildren(thead, tbody);
-    node.dispatchEvent(new Event('updated'))
-  }
 
-  node.addEventListener('update', handleUpdate);
-  handleUpdate();
+    for (let n of notifiers) {
+      n.notify();
+    }
+  };
+
+  this.getRowOffset = function (clientX) {
+    const tr = node.querySelector('tbody tr');
+    const td = tr.querySelector('td');
+    const rect = td.getBoundingClientRect();
+
+    // We want the width of one column.
+    const width = rect.width / td.colSpan;
+
+    const x = Math.max(0, clientX - rect.left);
+    const offset = Math.floor(x / width);
+    return Math.min(offset, headers.length);
+  };
+
+  this.move = function (target, from, to) {
+    const i = parseInt(target.parentElement.dataset.row);
+    const row = rows[i];
+
+    row.start = row.start + (to - from);
+    row.start = Math.max(0, row.start);
+    row.start = Math.min(row.start, headers.length - row.span);
+    that.render();
+  };
+ 
+  this.resize = function (target, from, to) {
+    const i = parseInt(target.parentElement.dataset.row);
+    const row = rows[i];
+
+    if (row.start === from) {
+      row.start = to;
+      row.span = row.span - (to - from);
+    } else {
+      row.span = (to + 1) - row.start;
+    }
+
+    row.start = Math.max(0, row.start);
+    row.start = Math.min(row.start, headers.length - row.span);
+    that.render();
+  };
 }
 

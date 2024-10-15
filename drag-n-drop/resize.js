@@ -1,7 +1,7 @@
-function Resize(node, headers, rows) {
+function Resize(table) {
   const that = this;
+  let from = 0;
   let clientX = 0;
-  let resizeFunc = null;
   let preview = null;
   let target = {
     node: null,
@@ -9,19 +9,15 @@ function Resize(node, headers, rows) {
     right: 0,
     width: 0
   };
-
-  // getCursorOffset returns the column offset of the cursor inside a cell.
-  function getCursorOffset(target, clientX) {
-    const rect = target.getBoundingClientRect();
-    const cellWidth = rect.width / target.colSpan
-    const x = clientX - rect.left;
-    return Math.floor(x / cellWidth);
-  };
+  let resizeFunc = null;
 
   function handleMouseDown(e) {
     if (e.preventDefault) {
       e.preventDefault();
     }
+
+    // Get the start offset.
+    from = table.getRowOffset(e.clientX);
     
     // Get the target and its edges;
     target.node = e.target.parentElement;
@@ -67,15 +63,21 @@ function Resize(node, headers, rows) {
     return false;
   }
 
-  function handleMouseUp() {
+  function handleMouseUp(e) {
     // Remove listeners on the document.
     document.removeEventListener('mousemove', resizeFunc);
     document.removeEventListener('mouseup', handleMouseUp);
 
+    // Remove resize preview.
     target.node.removeChild(preview);
 
+    // Update row.
+    const to = table.getRowOffset(e.clientX);
+    table.resize(target.node, from, to);
+
+    // Cleanup local state.
+    from = 0;
     clientX = 0;
-    resizeFunc = null;
     preview = null;
     target = {
       node: null,
@@ -83,16 +85,17 @@ function Resize(node, headers, rows) {
       right: 0,
       width: 0
     };
+    resizeFunc = null;
     return false;
   };
+  
+  /*** Public properties ***/
 
-  function handleUpdated() {
+  this.notify = function() {
     // Enable resize on the tasks.
-    items = node.querySelectorAll('.task .resize');
+    items = table.node.querySelectorAll('.task .resize');
     items.forEach(function (item) {
       item.addEventListener('mousedown', handleMouseDown, false);
     });
-  }
-
-  node.addEventListener('updated', handleUpdated);
+  };
 }
