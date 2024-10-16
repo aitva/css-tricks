@@ -1,4 +1,6 @@
-function Resize(table) {
+"use strict";
+
+function Resize(selector, table) {
   const that = this;
   let from = 0;
   let clientX = 0;
@@ -88,14 +90,25 @@ function Resize(table) {
     resizeFunc = null;
     return false;
   };
+
+  function createResizeHandles(elem) {
+    const left = document.createElement('div');
+    left.classList.add('resize', 'resize-left')
+    left.addEventListener('mousedown', handleMouseDown, false);
+    elem.appendChild(left)
+
+    const right = document.createElement('div');
+    right.classList.add('resize', 'resize-right')
+    right.addEventListener('mousedown', handleMouseDown, false);
+    elem.appendChild(right)
+  }
   
   /*** Public properties ***/
 
   this.notify = function() {
-    // Enable resize on the tasks.
-    items = table.node.querySelectorAll('.task .resize');
+    let items = document.querySelectorAll(selector);
     items.forEach(function (item) {
-      item.addEventListener('mousedown', handleMouseDown, false);
+      createResizeHandles(item);
     });
   };
 }

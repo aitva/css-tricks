@@ -29,26 +29,23 @@
       border: 1px solid var(--border-color);
       background-color: var(--bg-color);
     }
-    .task[draggable="true"] {
-      cursor: move;
-      position: relative;
+    .declared td.task {
+      --border-color: rgba(250, 190, 88, 0.5);
+      --bg-color: rgba(253, 227, 167, 0.5);
+      border: 1px solid var(--border-color);
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 2.5px,
+        var(--bg-color) 2.5px,
+        var(--bg-color) 5px
+      );
+    }
+    .selection {
+      background-color: orange;
+      opacity: 0.2;
 
-      .resize {
-        cursor: col-resize;
-        position: absolute;
-        top: -1px;
-        height: calc(100% + 2px);
-        width: 5px;
-      }
-      .resize-left {
-        left: -1px;
-      }
-      .resize-right {
-        right: -1px;
-      }
-      .resize-preview {
-        left: -1px;
-        width: calc(100% + 2px);
+      .selected {
         background-color: red;
         opacity: 0.2;
       }
@@ -56,53 +53,76 @@
     .stack {
       display: grid;
       grid-template-columns: 1fr;
+      align-items: start;
       & > * {
         grid-area: 1 / 1;
       }
     }
-    #declared {
-      td.task {
-        --border-color: rgba(250, 190, 88, 0.5);
-        --bg-color: rgba(253, 227, 167, 0.5);
-        border: 1px solid var(--border-color);
-        /*background-color: var(--bg-color);*/
-        background: repeating-linear-gradient(
-          -45deg,
-          transparent,
-          transparent 2.5px,
-          var(--bg-color) 2.5px,
-          var(--bg-color) 5px
-        );
-      }
+    .resize {
+      cursor: col-resize;
+      position: absolute;
+      top: -1px;
+      height: calc(100% + 2px);
+      width: 5px;
+    }
+    .resize-left {
+      left: -1px;
+    }
+    .resize-right {
+      right: -1px;
+    }
+    .resize-preview {
+      left: -1px;
+      width: calc(100% + 2px);
+      background-color: red;
+      opacity: 0.5;
     }
   </style>
 </head>
 <body>
+  <h1>Drag & drop</h1>
+  <h2>Tasks</h2>
   <div class="stack">
-    <table id="declared"></table>
-    <table id="planned"></table>
+    <table id="tasks-declared" class="declared"></table>
+    <table id="tasks-planned"></table>
+  </div>
+  <h2>Users</h2>
+  <div class="stack">
+    <table id="users-declared" class="declared"></table>
+    <table id="users-planned"></table>
   </div>
   <script src="table.js"></script>
   <script src="dragndrop.js"></script>
   <script src="resize.js"></script>
+  <script src="select.js"></script>
   <script>
+    "use strict";
     (function () {
-      const headers = ['07/10', '14/10', '21/10', '26/10', '04/11', '11/11', '18/11', '25/11'];
+      const headers = ['09/09', '16/09', '23/09', '30/09', '07/10', '14/10', '21/10', '26/10', '04/11', '11/11', '18/11', '25/11'];
       const plannedTasks = [
         {
           start:  1,
           span:   2,
           name:   'T1',
         },{
-          start:  4,
-          span:   2,
+          start:  3,
+          span:   3,
           name:   'T2',
+        },{
+          span:   -1,
+          name:   'T3',
+        },{
+          start:  6,
+          span:   4,
+          name:   'T4',
         }
       ];
-      let elem = document.getElementById('planned');
+      let elem = document.getElementById('tasks-planned');
       const planned = new Table(elem, headers, plannedTasks);
-      planned.addNotifier(new DragNDrop(planned));
-      planned.addNotifier(new Resize(planned));
+      const plannedSelect = new Select(planned);
+      plannedSelect.addNotifier(new DragNDrop('.selection, .selected', '.selection, #tasks-planned td', plannedSelect));
+      plannedSelect.addNotifier(new Resize('.selection', plannedSelect));
+      planned.addNotifier(plannedSelect);
       planned.render();
       
       const declaredTasks = [
@@ -111,12 +131,18 @@
           span:   3,
           name:   'T1',
         },{
-          start:  4,
-          span:   3,
+          span:   -1,
           name:   'T2',
+        },{
+          start:  5,
+          span:   3,
+          name:   'T3',
+        },{
+          span:   -1,
+          name:   'T4',
         }
       ];
-      elem = document.getElementById('declared');
+      elem = document.getElementById('tasks-declared');
       const declared = new Table(elem, headers, declaredTasks);
       declared.render();
     })();

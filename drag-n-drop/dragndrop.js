@@ -1,4 +1,6 @@
-function DragNDrop(table) {
+"use strict";
+
+function DragNDrop(dragSelector, dropSelector, table) {
   const that = this;
   let target = null;
   let from = 0;
@@ -37,16 +39,17 @@ function DragNDrop(table) {
     // Enable drop on all the cell.
     //
     // The `dragover` event is required for `drop` to work.
-    let items = table.node.querySelectorAll('td');
+    let items = document.querySelectorAll(dropSelector);
     items.forEach(function (item) {
       item.addEventListener('drop', handleDrop, false);
       item.addEventListener('dragover', handleDragOver, false);
     });
 
     // Enable drag on the tasks.
-    items = table.node.querySelectorAll('td.task');
+    items = document.querySelectorAll(dragSelector);
     items.forEach(function (item) {
       item.setAttribute('draggable', true);
+      item.style.cursor = 'move';
       item.addEventListener('dragstart', handleDragStart, false);
     });
   }

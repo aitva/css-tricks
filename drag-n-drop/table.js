@@ -1,3 +1,5 @@
+"use strict";
+
 function Table(node, headers, rows) {
   const that = this;
   const notifiers = [];
@@ -39,8 +41,7 @@ function Table(node, headers, rows) {
       const td = document.createElement('td');
       td.dataset.col = i;
 
-      if (row.start === i) {
-        createResizeHandles(td);
+      if (row.start === i && row.span > 0) {
         td.classList.add('task');
         td.colSpan = row.span;
         i += (row.span - 1);
@@ -51,16 +52,6 @@ function Table(node, headers, rows) {
 
     return tr;
   };
-
-  function createResizeHandles(td) {
-    const left = document.createElement('div');
-    left.classList.add('resize', 'resize-left')
-    td.appendChild(left)
-
-    const right = document.createElement('div');
-    right.classList.add('resize', 'resize-right')
-    td.appendChild(right)
-  }
 
   /*** Public properties ***/
 
@@ -109,11 +100,15 @@ function Table(node, headers, rows) {
     const i = parseInt(target.parentElement.dataset.row);
     const row = rows[i];
 
+    const span = to - from;
     if (row.start === from) {
       row.start = to;
-      row.span = row.span - (to - from);
+      row.span = row.span - span;
+    } else if (to < from){
+      row.start -= span;
+      row.span += span;
     } else {
-      row.span = (to + 1) - row.start;
+      row.span += span + 1;
     }
 
     row.start = Math.max(0, row.start);
