@@ -1,6 +1,11 @@
-"use strict";
+// resize.js provides functions to resize elements on a planning.
 
-function Resize(selector, table) {
+// Resize enables resizing of elements on a planning.
+//
+// On call to render, it selects elements using the selector and create handles
+// on their left and right sides. When an handle is click, an overlay is created
+// showing the user the current resize action.
+export function Resize(selector, table) {
   const that = this;
   let from = 0;
   let clientX = 0;
@@ -105,7 +110,7 @@ function Resize(selector, table) {
   
   /*** Public properties ***/
 
-  this.notify = function() {
+  this.render = function() {
     let items = document.querySelectorAll(selector);
     items.forEach(function (item) {
       createResizeHandles(item);

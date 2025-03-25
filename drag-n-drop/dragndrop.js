@@ -1,6 +1,20 @@
-"use strict";
+// dragndrop.js provides functions to drag and drop elements on a planning.
 
-function DragNDrop(dragSelector, dropSelector, table) {
+// DragNDrop enables drag and drop on a table.
+//
+// It enables drag on elements selected by the dragSelector. And it enables
+// drop on elements selected by dropSelector.
+//
+// It expects table to implement the following interface:
+//
+//    interface Table {
+//      // getRowOffset returns the row offset from the cursor position.
+//      getRowOffset(clientX)
+//
+//      // move moves the target.
+//      move(target, from, to)
+//    }
+export function DragNDrop(dragSelector, dropSelector, table) {
   const that = this;
   let target = null;
   let from = 0;
@@ -35,7 +49,7 @@ function DragNDrop(dragSelector, dropSelector, table) {
 
   /*** Public properties ***/
 
-  this.notify = function() {
+  this.render = function() {
     // Enable drop on all the cell.
     //
     // The `dragover` event is required for `drop` to work.
