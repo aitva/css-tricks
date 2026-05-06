@@ -17,14 +17,15 @@
       text-align: justify;
     }
     .container {
+      --max-width: calc(100% - 2rem);
       display: grid;
-      grid-template-columns: minmax(1em, 1fr) min(65ch, 100%) minmax(1em, 1fr);
+      grid-template-columns: minmax(1rem, 1fr) min(80ch, var(--max-width)) minmax(1rem, 1fr);
     }
     .container * {
       grid-column: 2;
     }
     .full-bleed {
-      max-width: 1200px;
+      max-width: var(--max-width);
       margin: 0 auto;
       grid-column: 1 / -1;
     }
